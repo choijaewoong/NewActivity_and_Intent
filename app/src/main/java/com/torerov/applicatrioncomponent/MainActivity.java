@@ -12,13 +12,13 @@ public class MainActivity extends AppCompatActivity {
 
     EditText inputView;
     TextView resultView;
+    private static final int REQUEST_CODE_OTHER = 0;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         inputView = (EditText)findViewById(R.id.edit_input);
         resultView = (TextView)findViewById(R.id.text_result);
-
         Button btn = (Button)findViewById(R.id.btn_other);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -26,8 +26,20 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, OtherActivity.class);
                 String text = inputView.getText().toString();
                 intent.putExtra(OtherActivity.EXTRA_MESSAGE, text);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_OTHER);
             }
         });
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE_OTHER){
+            String message = data.getStringExtra(OtherActivity.RESULT_MESSAGE);
+            resultView.setText(message);
+        }
+
+
     }
 }
